@@ -1,0 +1,398 @@
+#this file needs to be lowercased and based on what was used for main app
+#reference the class that we use
+#root is entier window
+#:import Clock kivy.clock.Clock
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+# https://stackoverflow.com/questions/52013569/kivy-can-i-freely-change-the-position-of-text-within-a-button-and-add-another
+# https://kivy.org/doc/stable/api-kivy.uix.checkbox.html
+<FirstScreen>
+	name: "first"
+	on_enter:
+		Clock.schedule_once(self.thing, 1.5)
+
+    GridLayout:
+        cols:1
+        Image:
+			source: 'Images/Much2do_LoadingIcon.png'
+			size: root.width, root.height
+			allow_stretch: True
+
+<SignuporSignin>
+	name: "SuSi"
+	GridLayout:
+        cols:1
+        # size: root.width, root.height
+        pos: 0, 0
+		Label:
+			size_hint: 0.1, 0.1
+			text: "Much 2-Do"
+			color: 1,0.53,0.42,1 # <-----------
+			canvas.before:
+				Color:
+					rgba: 0, 1, 0.52, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+		GridLayout:
+			cols:2
+			rows:3
+			# size: root.width, root.height
+			pos: 0, 0
+			Button:
+				text: "Sign Up"
+				size_hint: 0.4, 0.4
+				on_release:
+					root.manager.current = 'signup'
+					root.manager.transition.direction = 'left'
+			Button:
+				text: "Sign In"
+				size_hint: 0.4, 0.4
+				on_release:
+					root.manager.current = 'signin'
+					root.manager.transition.direction = 'left'
+
+<SignUpScreen>
+	name: "signup"
+
+	username: username
+	email: email
+	password: passw
+
+	GridLayout:
+		cols:1
+		# size: root.width, root.height
+		pos: 0, 0
+		Label:
+			size_hint: 0.1, 0.1
+			text: "Much 2-Do"
+			color: 1,0.53,0.42,1 # <-----------
+			canvas.before:
+				Color:
+					rgba: 0, 1, 0.52, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+
+		GridLayout:
+			cols:2
+			Label:
+				text: "Email: "
+				size_hint: 0.3, 0.3
+			TextInput:
+				id: email
+				write_tab: False
+				multiline: False
+				size_hint: 0.3, 0.3
+
+			Label:
+				text: "Username: "
+				size_hint: 0.3, 0.3
+			TextInput:
+				id: username
+				write_tab: False
+				multiline: False
+				size_hint: 0.3, 0.3
+
+			Label:
+				text: "Password: "
+				size_hint: 0.3, 0.3
+			TextInput:
+				id: passw
+				write_tab: False
+				multiline: False
+				# password: True
+				size_hint: 0.3, 0.3
+
+		Button:
+			text: "Sign Up"
+			write_tab: False
+			size_hint: 0.4, 0.4
+			on_release:
+				#send email, confirm, add to list
+				root.newusersubmit()
+				root.manager.transition.direction = 'left'
+
+		Button:
+			text: "I already have an account"
+			write_tab: False
+			size_hint: 0.4, 0.4
+			on_release:
+				root.back()
+				root.manager.transition.direction = 'left'
+
+# <EmailVerificationScreen>
+# 	name: "EmailVerif"
+# 	Code: Send Emails
+# 	GridLayout
+
+<SignInScreen>
+    name: "signin"
+	username: username
+	password: passw
+    GridLayout:
+        cols:1
+        pos: 0, 0
+        Label:
+            id: to_do
+            size_hint: 0.1, 0.1
+            text: "Much 2-Do"
+            color: 1,0.53,0.42,1 # <-----------
+            canvas.before:
+                Color:
+                    rgba: 0, 1, 0.52, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+        GridLayout:
+            cols:2
+            Label:
+                text: "Username: "
+                size_hint: 0.3, 0.3
+            TextInput:
+                id: username
+				write_tab: False
+                multiline: False
+                size_hint: 0.3, 0.3
+
+            Label:
+                text: "Password: "
+                size_hint: 0.3, 0.3
+            TextInput:
+                id: passw
+				write_tab: False
+                multiline: False
+                size_hint: 0.3, 0.3
+
+        Button:
+            id: something
+            text: "Sign In"
+            size_hint: 0.2, 0.2
+            on_press:
+                root.verify_credentials()
+                root.manager.transition.direction = 'up'
+		Button:
+			text: "Back"
+			size_hint: 0.2, 0.2
+			on_press:
+				root.manager.current = 'SuSi'
+				root.manager.transition.direction = 'right'
+
+<MainPage>
+	name: 'main'
+	username: username
+	view: view
+	# email: email
+	# password: password
+	# created: created
+	GridLayout:
+		cols:1
+		size: root.width, root.height
+		pos: 0, 0
+		Label:
+			id: to_do
+			size_hint: 0.1, 0.1
+			pos_hint: 0.2, 0.5
+			text: "Much 2-Do"
+			color: 1,0.53,0.42,1 # <-----------
+			canvas.before:
+				Color:
+					rgba: 0, 1, 0.52, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+		GridLayout:
+			cols:3
+			row:1
+			size: root.width/2, root.height/2
+			Button:
+				text: "Sign Out"
+				size_hint: .2, .1
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.logOut()
+			Label:
+				id: username
+				pos_hint:{"x": 0.1, "top":0.9}
+				size_hint:0.4, 0.1
+				text: "Username: "
+			Button:
+				id: name
+				background_normal: "Images/PlusButtonIcon.png"
+				size_hint: .4, .1
+				text: "New Note"
+				color: 0, 0, 0, 1
+				on_press:
+					root.new()
+					root.manager.transition.direction = 'left'
+
+		ScrollView:
+			id: view
+			do_scroll_x: False
+			do_scroll_y: True
+			size: self.size
+			# button:
+			# 	id:
+
+<Notes_Buttons>
+	size: 50, 50
+	size_hint: 1, None
+	height: 40
+	background_color: .5, .5, .5, 1
+	color: 1,1,1,1
+# <NotesGrid@Gridlayout>
+# 	cols: 1
+# 	spacing: '3dp'
+# 	size_hint_y: None
+# 	height: self.minimum_height
+
+# <NoteName>
+#     GridLayout:
+#         cols:1
+#         size: root.width, root.height
+#         pos: 0,0
+#         Label:
+#             size_hint: 0.1,0.1
+#             width: 100
+#             text: "Note Title:"
+#             color: 1,0.53,0.42,1
+#         TextInput:
+#             size_hint: 0.9, 0.1
+#             id: "Note_Title"
+#             multiline: False
+#         Label:
+#             size_hint: 0.1, 0.8
+#             pos_hint: 0.2, 0.5
+#             text: "Note Text:"
+#             color: 1,0.53,0.42,1
+# 		TextInput:
+# 			size_hint: 0.9, 0.8
+# 			id: "Note_txt"
+# 			multiline: True
+#         GridLayout:
+#             cols:2
+#             size: root.width/2, root.height/2
+#             pos: 0,0
+#             Label:
+#                 id: "Note_name"
+#                 text: "Note Name: "
+#             TextInput:
+#                 multiline: False
+#
+# 		Button:
+# 			text: "Save"
+# 			size_hint: 0.2, 0.2
+# 			on_press:
+# 				app.data
+# 				root.manager.transition.direction = 'right'
+# 				root.manager.current = "main"
+#
+# 		Button:
+# 			text: "Hey"
+# 			size_hint: 0.8, 0.2
+# 			on_press:
+# 				root.manager.transition.direction = 'left'
+# 				root.manager.current = "Circle"
+#
+#
+
+<NewNote>
+	name: 'new'
+	title: title
+	txt: txt
+
+	GridLayout:
+		cols:1
+		size: root.width, root.height
+		pos: 0,0
+		Label:
+			size_hint: 0.1, 0.1
+			width: 100
+			text: "Note Title:"
+			color: 1,0.53,0.42,1
+
+		TextInput:
+			size_hint: 0.9, 0.2
+			id: title
+			write_tab: False
+			multiline: False
+		Label:
+			size_hint: 0.1, 0.8
+			pos_hint: 0.2, 0.5
+			text: "Note Text:"
+			color: 1,0.53,0.42,1
+		TextInput:
+			size_hint: 0.9, 0.8
+			id: txt
+			write_tab: False
+			multiline: True
+
+		Button:
+			text: "Save"
+			size_hint: 0.3, 0.3
+			on_press:
+				root.manager.transition.direction = 'right'
+				root.save()
+
+		Button:
+			text: "Back"
+			size_hint: 0.3, 0.3
+			on_press:
+				root.manager.transition.direction = 'right'
+				root.back()
+
+<ExistingNote>
+	name: 'exist'
+	title: title
+	txt: txt
+
+	GridLayout:
+		cols:1
+		size: root.width, root.height
+		pos: 0,0
+		Label:
+			size_hint: 0.1, 0.1
+			width: 100
+			text: "Note Title:"
+			color: 1,0.53,0.42,1
+
+		TextInput:
+			size_hint: 0.9, 0.2
+			id: title
+			write_tab: False
+			multiline: False
+		Label:
+			size_hint: 0.1, 0.8
+			pos_hint: 0.2, 0.5
+			text: "Note Text:"
+			color: 1,0.53,0.42,1
+		TextInput:
+			size_hint: 0.9, 0.8
+			id: txt
+			write_tab: False
+			multiline: True
+
+		Button:
+			text: "Save"
+			size_hint: 0.3, 0.3
+			on_press:
+				root.manager.transition.direction = 'right'
+				root.save()
+
+		Button:
+			text: "Back"
+			size_hint: 0.3, 0.3
+			on_press:
+				root.manager.transition.direction = 'right'
+				root.back()
+# <ErrorPage>
+#     GridLayout:
+#         cols:1
+#         Button:
+#             on_press:
+#                 root.manager.current = 'SuSi'
+#                 root.manager.transition.direction = 'left'
+#             Image:
+#                 source: 'Images/Error_Icon.png'
+#                 size: root.width, root.height
+#                 allow_stretch: True
